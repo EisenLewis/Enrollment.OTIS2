@@ -2,6 +2,7 @@
 
 namespace Enrollment.App.ViewModels
 {
+    //This is a view model for my student class
     public class StudentVM
     {
         public int Id { get; set; }
