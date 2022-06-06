@@ -1,6 +1,7 @@
 //Configuration Area: Add services here
 //------------------------------------------------
 using Enrollment.App.Configuration;
+using Enrollment.App.Repositories;
 using Enrollment.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //Add Automapper service
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+//Add repository implmeentation
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+//builder.Services.AddScoped<IStudentRepository, TestingRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

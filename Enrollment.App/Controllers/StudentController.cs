@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Enrollment.App.Repositories;
 using Enrollment.App.ViewModels;
 using Enrollment.DatabaseModels;
 using Microsoft.AspNetCore.Mvc;
@@ -7,22 +8,22 @@ namespace Enrollment.App.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly AppDbContext context;
+        private readonly IStudentRepository repo;
         private readonly IMapper mapper;
 
-        public StudentController(AppDbContext _context, IMapper mapper)
+        public StudentController(IStudentRepository repo, IMapper mapper)
         {
-            context = _context;
+            this.repo = repo;
             this.mapper = mapper;
         }
 
-        public IActionResult Index()    //View All
+        public async Task<IActionResult> Index()    //View All
         {
             //List<StudentVM> svmlist = mapper.Map<List<StudentVM>>(
             //    context.Students.ToList());
 
             return View(mapper.Map<List<StudentVM>>(
-                context.Students.ToList()));
+                await repo.GetAllAsync()));
         }
 
         public IActionResult Add()
@@ -40,9 +41,7 @@ namespace Enrollment.App.Controllers
             {
                 //Save the student
                 //model.AdmissionDate = DateTime.Now;
-                await context.Set<Student>()
-                    .AddAsync(mapper.Map<Student>(model));
-                await context.SaveChangesAsync();
+                await repo.AddAsync(mapper.Map<Student>(model));
 
                 return RedirectToAction("Index");
             }
